@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Private Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<!-- Auth Screen -->
+<div id="auth-screen">
+  <div id="auth-box">
+    <h1>💬 Private Chat</h1>
+    <p id="auth-subtitle">Welcome back</p>
+
+    <div id="tab-bar">
+      <button class="tab active" onclick="switchTab('login')">Login</button>
+      <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <input id="auth-username" placeholder="Username" />
+    <div id="password-wrapper">
+      <input id="auth-password" placeholder="Password" type="password" />
+      <button type="button" id="toggle-pw" onclick="togglePassword()">&#128064;</button>
+    </div>
+    <p id="auth-error"></p>
+    <button id="auth-btn" onclick="submitAuth()">Login</button>
+  </div>
+</div>
+
+<!-- Chat -->
+<div id="app" style="display:none">
+  <div id="sidebar">
+    <div id="server-header">
+  <h2>My Server</h2>
+  <button type="button" id="add-channel-btn" onclick="showAddChannel()">＋</button>
+</div>
+
+<div id="new-channel-wrapper" style="display:none">
+  <input id="new-channel-input" placeholder="channel-name" />
+  <button type="button" id="new-channel-confirm" onclick="addChannel()">✔</button>
+</div>
+
+<div class="channel active" onclick="switchChannel('general', this)" id="ch-general">
+  <span class="channel-name">general</span>
+  <button type="button" class="rename-channel-btn" onclick="startRenameChannel(event, 'general')">📝</button>
+  <button type="button" class="delete-channel-btn" onclick="confirmDeleteChannel(event, 'general')">－</button>
+</div>
+<div class="channel" onclick="switchChannel('random', this)" id="ch-random">
+  <span class="channel-name">random</span>
+  <button type="button" class="rename-channel-btn" onclick="startRenameChannel(event, 'random')">📝</button>
+  <button type="button" class="delete-channel-btn" onclick="confirmDeleteChannel(event, 'random')">－</button>
+</div>
+<div class="channel" onclick="switchChannel('gaming', this)" id="ch-gaming">
+  <span class="channel-name">gaming</span>
+  <button type="button" class="rename-channel-btn" onclick="startRenameChannel(event, 'gaming')">📝</button>
+  <button type="button" class="delete-channel-btn" onclick="confirmDeleteChannel(event, 'gaming')">－</button>
+</div>
+<div class="channel" onclick="switchChannel('gaming', this)">
+  <span class="channel-name">gaming</span>
+  <button type="button" class="rename-channel-btn" onclick="promptRenameChannel(event, 'gaming')">📝</button>
+</div>
+<div id="user-info">
+  <span id="logged-in-user"></span>
+  <button onclick="openSettings()">⚙️</button>
+</div>
+  </div>
+
+  <div id="main">
+    <div id="channel-header"><span>#</span><span id="current-channel">general</span></div>
+    <div id="messages"></div>
+    <div id="input-area">
+      <div id="input-box">
+        <input id="msg-input" placeholder="Message #general" onkeydown="if(event.key==='Enter') sendMsg()" />
+        <button id="send-btn" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+<!-- Settings Page -->
+<div id="settings-screen" style="display:none">
+  <div id="settings-box">
+    <button id="settings-back" onclick="closeSettings()">← Back</button>
+    <h2>Settings</h2>
+
+    <div class="settings-section">
+      <label>Rename yourself</label>
+      <div id="rename-wrapper">
+        <input id="rename-input" placeholder="New username" />
+        <button onclick="renameUser()">Save</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <label>Account</label>
+      <button id="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+<!-- Delete Channel Popup -->
+<div id="delete-popup" style="display:none">
+  <div id="delete-popup-box">
+    <h3>Delete Channel</h3>
+    <p id="delete-popup-msg"></p>
+    <div id="delete-popup-buttons">
+      <button type="button" id="delete-no" onclick="closeDeletePopup()">No</button>
+      <button type="button" id="delete-yes" onclick="executeDeleteChannel()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
